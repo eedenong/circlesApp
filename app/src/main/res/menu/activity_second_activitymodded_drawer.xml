@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home24"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_food"
+            android:icon="@drawable/food"
+            android:title="Food" />
+        <item
+            android:id="@+id/nav_transport"
+            android:icon="@drawable/transport"
+            android:title="Transport" />
+        <item
+            android:id="@+id/nav_bills"
+            android:icon="@drawable/bills"
+            android:title="Bills" />
+        <item android:id="@+id/nav_misc"
+            android:title = "Miscellaneous"
+            android:icon="@drawable/misc"
+            />
+        <item
+            android:id="@+id/generate"
+            android:icon="@drawable/scan"
+            android:title="Generate QR" />
+    </group>
+
+    <item android:title="App">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Settings" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/logout"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>
