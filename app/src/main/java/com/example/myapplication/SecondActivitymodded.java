@@ -95,6 +95,8 @@ public class SecondActivitymodded extends AppCompatActivity
     static Long Expiresin, ExpiryTime;
 
     Button scan_btn;
+    Button dbsBtn;
+
     public static TextView resultTextView;
 
     @Override
@@ -105,6 +107,7 @@ public class SecondActivitymodded extends AppCompatActivity
         progressDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
         syncBtn = (Button)findViewById(R.id.btn_sync);
+        dbsBtn = (Button)findViewById(R.id.btn_dbs);
         scanReceipt = (Button)findViewById(R.id.scanReceipt);
         pieChart = findViewById(R.id.pieChart);
         pieChart.setDrawHoleEnabled(true);
@@ -130,12 +133,17 @@ public class SecondActivitymodded extends AppCompatActivity
          * Updates the receipt history and the pie chart when the user clicks the sync button.
          * Currently using a randomiser to randomly generate the values for each category.
          */
+        dbsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dbs.com/sandbox/api/sg/v1/oauth/authorize" + "?client_id=" + clientId + "&redirect_uri=" + redirectUri + "&scope=Read&response_type=code&state=0399"));
+                  startActivity(intent);
+            }
+        });
         syncBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               //updateChart(pieChart);
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dbs.com/sandbox/api/sg/v1/oauth/authorize" + "?client_id=" + clientId + "&redirect_uri=" + redirectUri + "&scope=Read&response_type=code&state=0399"));
-                startActivity(intent);
+               updateChart(pieChart);
             }
         });
         scanReceipt.setOnClickListener(new View.OnClickListener() {
@@ -197,79 +205,31 @@ public class SecondActivitymodded extends AppCompatActivity
 
                 new RetrieveFeedTask().execute(Authorization,code,redirectUri,clientId);
 
+                GenerateDBSreceipt gdbs = new GenerateDBSreceipt();
+                if (GenerateDBSreceipt.counter == 5) {
+                    GenerateDBSreceipt.counter = 1;
+                }
+                if (GenerateDBSreceipt.counter == 1) {
+                    gdbs.generate();
+                    GenerateDBSreceipt.counter++;
+                }
+                else if (GenerateDBSreceipt.counter == 2) {
+                    gdbs.generate2();
+                    GenerateDBSreceipt.counter++;
+                }
+                else if (GenerateDBSreceipt.counter == 3){
+                    gdbs.generate3();
+                    GenerateDBSreceipt.counter++;
+                }
+                else if (GenerateDBSreceipt.counter == 4){
+                    gdbs.generate4();
+                    GenerateDBSreceipt.counter++;
+                }
+
             }
         }
 
-//                // Using Retrofit builder getting Authorization code
-//                Retrofit.Builder builder = new Retrofit.Builder()
-//                        .baseUrl("https://www.dbs.com/sandbox/api/sg/v1/")
-//                        .addConverterFactory(GsonConverterFactory.create());
-//
-//                Retrofit retrofit = builder.build();
-//                Authorization = new String (Base64.encode((clientId+":"+clientSecret).getBytes(),Base64.DEFAULT));
-//                OAuthServer.OAuthServerIntface oAuthServerIntface = retrofit.create(OAuthServer.OAuthServerIntface.class);
-//
-//                final Call<OAuthToken> accessTokenCall = oAuthServerIntface.getAccessToken(
-//                        Authorization,
-//                        code,
-//                        redirect_uri
-//                );
-//
-//                accessTokenCall.enqueue(new Callback<OAuthToken>() {
-//                    @Override
-//                    public void onResponse(Call<OAuthToken> call, Response<OAuthToken> response) {
-//                        access_token = response.body().getAccessToken();
-//                        token_type = response.body().getTokenType();
-//                        Expiresin = response.body().getExpiresIn();
-//                        Refreshtoken = response.body().getRefreshToken();
-//                        ExpiryTime = System.currentTimeMillis() + (Expiresin * 1000);
-//                        partyID = response.body().getPartyId();
-//
-//
-//                        saveData();
-//
-//                        //Intent i = new Intent(SecondActivitymodded.this,Overview.class);
-//                        //startActivity(i);
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<OAuthToken> call, Throwable t) {
-//                        Toast.makeText(SecondActivitymodded.this, "error",Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            }
-//            if(TextUtils.isEmpty(code)) {
-//                //a problem occurs, the user reject our granting request or something like that
-//                //Toast.makeText(this, getString(R.string.email),Toast.LENGTH_LONG).show();
-//                finish();
-//            }
-//
-//        }
-//
-//
-//
-//    }
-//
-//    public void  saveData(){
-//
-//        SharedPreferences.Editor sharedPref = getSharedPreferences("authInfo", Context.MODE_PRIVATE).edit();
-//        sharedPref.putString("AuthCode", code);
-//        sharedPref.putString("secCode", access_token);
-//        sharedPref.putString("refresh", Refreshtoken);
-//        sharedPref.putLong("expiry", ExpiryTime);
-//        sharedPref.apply();
-//
-//    }
-//
-//    public void loadData(){
-//        SharedPreferences sharedPref = getSharedPreferences("authInfo",Context.MODE_PRIVATE);
-//        code = sharedPref.getString("AuthCode", "");
-//        access_token = sharedPref.getString("secCode", "");
-//        Refreshtoken = sharedPref.getString("refresh","");
-//        ExpiryTime = sharedPref.getLong("expiry",0);
-//
+
 
     }
     @Override
@@ -367,20 +327,33 @@ GenerateQR generatefragment = null;
         pieChart.setUsePercentValues(true);
 
         ArrayList<PieEntry> yvalues = new ArrayList<PieEntry>();
-        Random rand = new Random();
-        float f = FoodFragment.foodtotal;
+
+        FoodFragment foodFragment = new FoodFragment();
+        TransportFragment transportFragment = new TransportFragment();
+        BillFragment billFragment = new BillFragment();
+        MiscFragment miscFragment = new MiscFragment();
+
+        float f = foodFragment.foodtotal;
         foodExpend = f;
-        float t = TransportFragment.transporttotal;
+        float t = transportFragment.transporttotal;
         transportExpend = t;
-        float b = BillFragment.billtotal;
+        float b = billFragment.billtotal;
         billsExpend = b;
-        float m = MiscFragment.misctotal;
+        float m = miscFragment.misctotal;
         miscExpend = m;
 
-        yvalues.add(new PieEntry(f, "Food", 0));
-        yvalues.add(new PieEntry(t, "Transport", 1));
-        yvalues.add(new PieEntry(b, "Bills", 2));
-        yvalues.add(new PieEntry(m, "Misc", 3));
+        if(f != 0) {
+            yvalues.add(new PieEntry(f, "Food", 0));
+        }
+        if(t != 0) {
+            yvalues.add(new PieEntry(t, "Transport", 1));
+        }
+        if(b != 0) {
+            yvalues.add(new PieEntry(b, "Bills", 2));
+        }
+        if(m != 0) {
+            yvalues.add(new PieEntry(m, "Misc", 3));
+        }
 
         dataSet = new PieDataSet(yvalues, "");
         data = new PieData(dataSet);
@@ -412,7 +385,6 @@ GenerateQR generatefragment = null;
         pieChart.setUsePercentValues(true);
 
         ArrayList<PieEntry> yvalues = new ArrayList<PieEntry>();
-        Random rand = new Random();
         float f = FoodFragment.foodtotal;
         foodExpend = f;
         float t = TransportFragment.transporttotal;
@@ -421,11 +393,18 @@ GenerateQR generatefragment = null;
         billsExpend = b;
         float m = MiscFragment.misctotal;
         miscExpend = m;
-
-        yvalues.add(new PieEntry(f, "Food", 0));
-        yvalues.add(new PieEntry(t, "Transport", 1));
-        yvalues.add(new PieEntry(b, "Bills", 2));
-        yvalues.add(new PieEntry(m, "Misc", 3));
+        if(f != 0) {
+            yvalues.add(new PieEntry(f, "Food", 0));
+        }
+        if(t != 0) {
+            yvalues.add(new PieEntry(t, "Transport", 1));
+        }
+        if(b != 0) {
+            yvalues.add(new PieEntry(b, "Bills", 2));
+        }
+        if(m != 0) {
+            yvalues.add(new PieEntry(m, "Misc", 3));
+        }
 
         dataSet = new PieDataSet(yvalues, "");
         data = new PieData(dataSet);
@@ -435,9 +414,9 @@ GenerateQR generatefragment = null;
         pieChart.setData(data);
         pieChart.notifyDataSetChanged();
         pieChart.invalidate();
-        Description description = new Description();
-        description.setText("");
-        pieChart.setDescription(description);
+               Description description = new Description();
+       description.setText("");
+       pieChart.setDescription(description);
         pieChart.setDrawHoleEnabled(true);
         pieChart.setTransparentCircleRadius(58f);
         pieChart.setHoleRadius(58f);

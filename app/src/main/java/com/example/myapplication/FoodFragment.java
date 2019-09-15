@@ -42,7 +42,7 @@ public class FoodFragment extends Fragment {
     ArrayList<String> list;
     ArrayAdapter<String> adapter;
     User user;
-    float billsExpend ;
+    float foodExpend ;
     public static float foodBudgetDollar = 50;
 
     @Override
@@ -71,11 +71,11 @@ public class FoodFragment extends Fragment {
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
 
                     user = ds.getValue(User.class);
-                    billsExpend += Float.parseFloat(user.getPrice().substring(1));
+                    foodExpend += Float.parseFloat(user.getPrice().substring(1));
                     list.add("Item: "+user.getProductName() + "   Price: "+user.getPrice() + "   Date: " + user.getDate());
                 }
                 listView.setAdapter(adapter);
-                String BE = "$" + billsExpend + "";
+                String BE = "$" + foodExpend + "";
                 billsExpenditureNumber.setText(BE);
                 float billsBudget = foodBudgetDollar;
                 String BB ="$" + billsBudget + "";
@@ -83,14 +83,14 @@ public class FoodFragment extends Fragment {
                 String result = "";
                 DecimalFormat df = new DecimalFormat("##.##");
                 df.setRoundingMode(RoundingMode.DOWN);
-                if (billsExpend < billsBudget) {
-                    result = "You still have "  + df.format((1 - billsExpend/billsBudget)*100 )+ "% of your budget to spend!";
-                } else if (billsExpend > billsBudget){
-                    result = "You have exceeded your budget by " + df.format(((billsExpend/billsBudget)-1) * 100) + "%!";
+                if (foodExpend < billsBudget) {
+                    result = "You still have "  + df.format((1 - foodExpend/billsBudget)*100 )+ "% of your budget to spend!";
+                } else if (foodExpend > billsBudget){
+                    result = "You have exceeded your budget by " + df.format(((foodExpend/billsBudget)-1) * 100) + "%!";
                 } else {
                     result = "You have used up exactly all your budget!";
                 }
-                foodtotal = billsExpend;
+                foodtotal = foodExpend;
                 resultTv.setText(result);
             }
 

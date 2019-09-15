@@ -68,7 +68,7 @@ public class Oauth extends Activity implements AdapterView.OnItemSelectedListene
         imageView = findViewById(R.id.imageView);
         txtView = findViewById(R.id.txtView);
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
         // Spinner click listener
         spinner.setOnItemSelectedListener(this);
@@ -89,8 +89,6 @@ public class Oauth extends Activity implements AdapterView.OnItemSelectedListene
         // attaching data adapter to spinner
         spinner.setAdapter(dataAdapter);
 
-        category = spinner.getSelectedItem().toString().trim();
-
         snapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,7 +104,7 @@ public class Oauth extends Activity implements AdapterView.OnItemSelectedListene
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                uploadTxt();
+                uploadTxt(spinner);
             }
         });
     }
@@ -176,7 +174,7 @@ public class Oauth extends Activity implements AdapterView.OnItemSelectedListene
 
         }
     }
-    private void uploadTxt() {
+    private void uploadTxt(Spinner spinner) {
             String Username = firebaseAuth.getInstance().getCurrentUser().getUid();
             user = new User();
             String userid;
@@ -186,7 +184,8 @@ public class Oauth extends Activity implements AdapterView.OnItemSelectedListene
             else{
                 userid = "-";
             }
-            reff = FirebaseDatabase.getInstance().getReference();
+        reff = FirebaseDatabase.getInstance().getReference();
+        category = spinner.getSelectedItem().toString().trim();
             user.setDate(date);
             user.setCategory(category);
             user.setProductName(productname);

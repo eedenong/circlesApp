@@ -42,7 +42,7 @@ public class TransportFragment extends Fragment {
     ArrayList<String> list;
     ArrayAdapter<String> adapter;
     User user;
-    float billsExpend ;
+    float transExpend ;
     public static float transportBudgetDollar = 50;
 
 
@@ -71,11 +71,11 @@ public class TransportFragment extends Fragment {
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
 
                     user = ds.getValue(User.class);
-                    billsExpend += Float.parseFloat(user.getPrice().substring(1));
+                    transExpend += Float.parseFloat(user.getPrice().substring(1));
                     list.add("Item: "+user.getProductName() + "   Price: "+user.getPrice() + "   Date: " + user.getDate());
                 }
                 listView.setAdapter(adapter);
-                String BE = "$" + billsExpend + "";
+                String BE = "$" + transExpend + "";
                 billsExpenditureNumber.setText(BE);
                 float billsBudget = transportBudgetDollar;
                 String BB ="$" + billsBudget + "";
@@ -83,14 +83,14 @@ public class TransportFragment extends Fragment {
                 String result = "";
                 DecimalFormat df = new DecimalFormat("##.##");
                 df.setRoundingMode(RoundingMode.DOWN);
-                if (billsExpend < billsBudget) {
-                    result = "You still have "  + df.format((1 - billsExpend/billsBudget)*100 )+ "% of your budget to spend!";
-                } else if (billsExpend > billsBudget){
-                    result = "You have exceeded your budget by " + df.format(((billsExpend/billsBudget)-1) * 100) + "%!";
+                if (transExpend < billsBudget) {
+                    result = "You still have "  + df.format((1 - transExpend/billsBudget)*100 )+ "% of your budget to spend!";
+                } else if (transExpend > billsBudget){
+                    result = "You have exceeded your budget by " + df.format(((transExpend/billsBudget)-1) * 100) + "%!";
                 } else {
                     result = "You have used up exactly all your budget!";
                 }
-                transporttotal = billsExpend;
+                transporttotal = transExpend;
                 resultTv.setText(result);
             }
 

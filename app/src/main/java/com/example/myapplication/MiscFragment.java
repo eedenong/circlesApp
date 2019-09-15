@@ -43,7 +43,7 @@ public class MiscFragment extends Fragment {
     ArrayList<String> list;
     ArrayAdapter<String> adapter;
     User user;
-    float billsExpend ;
+    float miscExpend ;
     public static float miscBudgetDollar = 50;
 
 
@@ -72,11 +72,11 @@ public class MiscFragment extends Fragment {
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
 
                     user = ds.getValue(User.class);
-                    billsExpend += Float.parseFloat(user.getPrice().substring(1));
+                    miscExpend += Float.parseFloat(user.getPrice().substring(1));
                     list.add("Item: "+user.getProductName() + "   Price: "+user.getPrice() + "   Date: " + user.getDate());
                 }
                 listView.setAdapter(adapter);
-                String BE = "$" + billsExpend + "";
+                String BE = "$" + miscExpend + "";
                 billsExpenditureNumber.setText(BE);
                 float billsBudget = miscBudgetDollar;
                 String BB ="$" + billsBudget + "";
@@ -84,14 +84,14 @@ public class MiscFragment extends Fragment {
                 String result = "";
                 DecimalFormat df = new DecimalFormat("##.##");
                 df.setRoundingMode(RoundingMode.DOWN);
-                if (billsExpend < billsBudget) {
-                    result = "You still have "  + df.format((1 - billsExpend/billsBudget)*100 )+ "% of your budget to spend!";
-                } else if (billsExpend > billsBudget){
-                    result = "You have exceeded your budget by " + df.format(((billsExpend/billsBudget)-1) * 100) + "%!";
+                if (miscExpend < billsBudget) {
+                    result = "You still have "  + df.format((1 - miscExpend/billsBudget)*100 )+ "% of your budget to spend!";
+                } else if (miscExpend > billsBudget){
+                    result = "You have exceeded your budget by " + df.format(((miscExpend/billsBudget)-1) * 100) + "%!";
                 } else {
                     result = "You have used up exactly all your budget!";
                 }
-                misctotal = billsExpend;
+                misctotal = miscExpend;
                 resultTv.setText(result);
             }
 
