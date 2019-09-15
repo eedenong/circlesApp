@@ -121,14 +121,6 @@ public class SecondActivitymodded extends AppCompatActivity
 
             }
         });
-        manualAdd = (Button)findViewById(R.id.manualInput);
-        manualAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SecondActivitymodded.this, ManualAdd.class));
-
-            }
-        });
         /**
          * Updates the receipt history and the pie chart when the user clicks the sync button.
          * Currently using a randomiser to randomly generate the values for each category.
@@ -272,6 +264,8 @@ FoodFragment foodfragment = null;
 MiscFragment miscfragment = null;
 TransportFragment transportfragment = null;
 GenerateQR generatefragment = null;
+manualAddition manualfragment = null;
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -299,6 +293,10 @@ GenerateQR generatefragment = null;
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.drawer_layout, generatefragment, generatefragment.getTag()).addToBackStack(null).commit();
 
+        } else if(id == R.id.manualEntry) {
+            manualfragment = new manualAddition();
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(R.id.drawer_layout, manualfragment, manualfragment.getTag()).addToBackStack(null).commit();
         }
         else if (id == R.id.nav_logout) {
             Logout();

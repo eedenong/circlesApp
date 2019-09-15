@@ -28,6 +28,10 @@
             android:id="@+id/generate"
             android:icon="@drawable/scan"
             android:title="Generate QR" />
+        <item
+            android:id="@+id/manualEntry"
+            android:icon="@drawable/scan"
+            android:title="Manual Entry" />
     </group>
 
     <item android:title="App">

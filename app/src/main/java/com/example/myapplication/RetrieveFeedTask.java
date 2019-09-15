@@ -74,20 +74,6 @@ JSONObject dec = new JSONObject(decoded);
 String partyID = dec.getString("cin");
             return response.toString();
 
-           /* URIBuilder builder = new URIBuilder("https://www.dbs.com/sandbox/api/sg/v1/transactions/categories");
-            builder.setParameter("partyId", partyID).setParameter("type", "standard");
-            HttpGetHC4 request2 = new HttpGetHC4(builder.build());
-           // HttpGetHC4 request2 = new HttpGetHC4(url);
-
-            request2.setHeader("Content-Type", "application/json");
-            request2.setHeader("clientId", clientID);
-            request2.setHeader("accessToken",accessToken);
-            HttpResponse response2 = client.execute(request2);
-            String json_string2 = EntityUtils.toString(response2.getEntity());
-            JSONObject json2 = new JSONObject(json_string2);*/
-
-
-
 
         }
         catch( Exception e){
